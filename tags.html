@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>tag builder test</title>
+<style>
+
+#tags-container-1{
+  float: left;
+  margin-right:24px;
+}
+
+#tags-container-2{
+  float: left;
+}
+
+.tags-container{
+  font-family: helvetica,arial,tahoma;
+  font-size: 42px;
+  padding:8px;
+  margin: 8px;
+  max-width: 600px;
+  background-color: #EFEFEF;
+  text-align: left;
+  border-radius:10px;
+}
+
+.tags-container p{
+  float: left;
+  margin:1px 2px;
+  color: #333;
+  border-bottom: dashed 1px #CCC;
+  cursor:pointer;
+}
+
+.tags-container p a{
+  text-decoration: none;
+  color: #333;
+}
+
+.tags-container p:hover{
+  background-color: #E1E1E1;
+}
+
+</style>
+
+<script src="lib/jquery-1.8.1.min.js"></script>
+<script src="lib/list.js"></script>
+<script src="tags.js"></script>
+<script>
+$(function(){
+    var items = [{desc:'Viet Nam',val:87848.445, url:'http://vietnam.com'},{desc:'Germany',val:82302.465},{desc:'Egypt',val:81121.077},{desc:'Iran (Islamic Republic of)',val:73973.63},{desc:'Turkey',val:72752.325},{desc:'Thailand',val:69122.234},{desc:'Dem. Rep. of the Congo',val:65965.795},{desc:'France',val:62787.427},{desc:'United Kingdom',val:62035.57},{desc:'Italy',val:60550.8479999999},{desc:'South Africa',val:50132.817},{desc:'Republic of Korea',val:48183.584},{desc:'Myanmar',val:47963.012},{desc:'Colombia',val:46294.841},{desc:'Spain',val:46076.989},{desc:'Ukraine',val:45448.329},{desc:'United Republic of Tanzania',val:44841.226},{desc:'Sudan',val:43551.941},{desc:'Caribbean',val:41646.07},{desc:'Kenya',val:40512.682},{desc:'Argentina',val:40412.376},{desc:'Poland',val:38276.66},{desc:'Oceania',val:36592.873},{desc:'Algeria',val:35468.208},{desc:'Canada',val:34016.593}
+              ];
+    
+    $('#tags-container-1').append((new tagCloud({items: items, displayValue: true, inActiveLinks: false, sort: 'random'})).build());
+    
+    $('#tags-container-2').append((new tagCloud({items: items, sort: 'random', noRandomColor: true})).build());
+});
+</script>
+
+</head>
+<body>
+<div id='tags-container-1' class="tags-container"></div>
+<div id='tags-container-2' class="tags-container"></div>
+</body>
+</html>
