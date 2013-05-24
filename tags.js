@@ -20,7 +20,7 @@ function tagCloud(options){
     var container = $('<div/>');
     var valigns = options.grabble ? { 0: 'sub', 1: 'super', 2: 'middle' } : { 0: '', 1: '', 2: '' };
     var minFactor = options.minFactor || 0.2;
-    var randomSort = options.sort == 'random'; 
+    var randomSort = options.sort === 'random'; 
     var noOpacity = options.noOpacity;   
     var noRandomColor = options.noRandomColor;     
 
