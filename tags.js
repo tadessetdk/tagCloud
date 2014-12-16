@@ -4,7 +4,7 @@
     options {
         items, cssclass, align, displayValue, hideTitle, 
         displayExact, linkTarget, grabble, inActiveLinks,  
-        minFactor, randomSort, noOpacity, noRandomColor 
+        randomSort, noRandomColor, minFontSizeRatio
     }   
 */
 function tagCloud(options){
@@ -19,25 +19,9 @@ function tagCloud(options){
     var inActiveLinks = options.inActiveLinks;
     var container = $('<div/>');
     var valigns = options.grabble ? { 0: 'sub', 1: 'super', 2: 'middle' } : { 0: '', 1: '', 2: '' };
-    var minFactor = options.minFactor || 0.2;
     var randomSort = (options.sort || '').toLowerCase() == 'random'; 
-    var noOpacity = options.noOpacity;   
-    var noRandomColor = options.noRandomColor;     
-
-    function calculateBoundaries(items){
-    
-        var min = items.reduce(function(prev, cur){ 
-            return cur ? (prev.val < cur.val ? prev : cur) : prev;
-        });
-        
-        var max = items.reduce(function(prev, cur){ 
-            return cur ? (prev.val > cur.val ? prev : cur) : prev;
-        });
-        
-        var diff = (max.val - min.val) || 1;
-        return {min: min.val, max: max.val, diff: diff };
-        
-    }
+    var noRandomColor = options.noRandomColor; 
+	var minFontSizeRatio = Math.min((options.minFontSizeRatio || .3), 0.7);    
     
     function centerSort(items){
     
@@ -63,19 +47,17 @@ function tagCloud(options){
     
     }
     
-    function addTag(tag, bnd){
+    function addTag(tag, diff){
     
         var val = displayValue ? ( '(' + (displayExact ? tag.val : (Math.round(tag.val * 100) / 100)) + ')' ) : '';
         var text = tag.desc + val;
-        var factor = (tag.val - bnd.min) / bnd.diff; 
-        factor = factor < minFactor ? minFactor : factor;
-        var opacity = noOpacity ? 1 : (factor + 0.4);
+		var factor = (1 - minFontSizeRatio) / diff; // max value maps to 1em and min to 0.3em 
+		var fontSize = factor * tag.val;
         var color = noRandomColor ? '' : getColor();
         
         var tagCont = $('<p/>').css(
                           {
-                              'font-size': (factor + 'em'),
-                              'opacity': opacity,
+                              'font-size': (fontSize + 'em'),
                               'vertical-align': tag.valign,
                               color: color
                           }
@@ -100,11 +82,12 @@ function tagCloud(options){
             return t;
             
         });
-             
-        var bnd = calculateBoundaries(items);
+         
+		var values = items.pluck("val");
+        var diff = (values.max() - values.min()) || 1;
        
         for(var i = 0 , len = sortedItems.length ; i < len ; i++){
-            addTag(sortedItems[i], bnd);
+            addTag(sortedItems[i], diff);
         }        
         
         return container;
